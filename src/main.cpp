@@ -16,6 +16,9 @@ ModbusClientRTU *MBclient;
 ModbusBridgeWiFi MBbridge;
 WiFiManager wm;
 
+const unsigned long checkInterval = 30000;
+unsigned long lastCheckTime = 0;
+
 void setup() {
   debugSerial.begin(115200);
   dbgln();
@@ -62,5 +65,12 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  unsigned long currentTime = millis();
+
+  if ((WiFi.status() != WL_CONNECTED) && (currentTime - lastCheckTime >= checkInterval)) {
+    Serial.println("Reconnecting to WiFi...");
+    WiFi.disconnect();
+    WiFi.reconnect();
+    lastCheckTime = currentTime;
+  }  
 }
