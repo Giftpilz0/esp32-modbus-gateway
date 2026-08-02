@@ -22,7 +22,9 @@ void Config::begin(Preferences *prefs)
     _modbusRtsPin = _prefs->getChar("modbusRtsPin", _modbusRtsPin);
     _serialBaudRate = _prefs->getULong("serialBaudRate", _serialBaudRate);
     _serialConfig = _prefs->getULong("serialConfig", _serialConfig);
-    _webPassword = _prefs->getString("webPassword", _webPassword);
+    if (_prefs->isKey("webPassword")) {
+        _webPassword = _prefs->getString("webPassword", _webPassword);
+    }
 }
 
 uint16_t Config::getTcpPort(){
